@@ -38,5 +38,5 @@ jobs:
       - uses: Andrew-Chen-Wang/github-wiki-action@v4
         with:
           token: ${{ secrets.GIGANTIC_MEGA_PROJECT_GITHUB_TOKEN }}
-          repository: c61292558/WingHexExplorer2
+          repository: c61292558/WingHexExplorer2.wiki
           path: .
