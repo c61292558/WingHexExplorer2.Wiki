@@ -1,32 +1,25 @@
 import os
-import urllib.parse
+import glob
 
-# 指定要处理的目录和文件类型
-base_path = 'markdown-pic'  # 替换为您的文件夹路径
-markdown_files = [f for f in os.listdir(base_path) if f.endswith('.md')]
+# 获取所有 Markdown 文件
+md_files = glob.glob("*.md")
 
-for md_file in markdown_files:
-    file_path = os.path.join(base_path, md_file)
-
-    with open(file_path, 'r', encoding='utf-8') as f:
+for md_file in md_files:
+    with open(md_file, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    # 找到所有的图片路径并进行解码
-    updated_content = content
-    for line in content.splitlines():
-        if '![' in line:
-            start = line.find('(') + 1
-            end = line.find(')', start)
-            img_path = line[start:end]
+    # 在这里进行路径的编码
+    # 假设您只需要编码 markdown 文件中的图片路径
+    # 这里您可以使用 urllib.parse.quote 对路径进行编码
+    from urllib.parse import quote
 
-            # 解码路径
-            decoded_path = urllib.parse.unquote(img_path)
+    # 处理每个路径
+    # 这个正则表达式会查找 markdown 中的路径
+    import re
+    content = re.sub(r'!\[(.*?)\]\((.*?)\)', lambda m: f'![{m.group(1)}]({quote(m.group(2))})', content)
 
-            # 检查图片是否存在
-            full_image_path = os.path.join(os.path.dirname(file_path), decoded_path)
-            if os.path.isfile(full_image_path):
-                # 替换内容中的路径为中文路径
-                updated_content = updated_content.replace(img_path, decoded_path)
+    # 写回文件
+    with open(md_file, 'w', encoding='utf-8') as f:
+        f.write(content)
 
-    with open(file_path, 'w', encoding='utf-8') as f:
-        f.write(updated_content)
+print("路径编码完成！")
