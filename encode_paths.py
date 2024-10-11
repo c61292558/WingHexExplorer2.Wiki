@@ -1,6 +1,6 @@
 import os
 import glob
-from urllib.parse import quote
+from urllib.parse import unquote
 
 # 获取所有 Markdown 文件
 md_files = glob.glob("*.md")
@@ -9,12 +9,11 @@ for md_file in md_files:
     with open(md_file, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    # 处理每个路径，确保只进行一次编码
-    # 使用正则表达式查找图片路径
+    # 使用 unquote 函数将 URL 编码还原为正常文本（如中文）
     import re
     content = re.sub(
         r'!\[(.*?)\]\((.*?)\)',
-        lambda m: f'![{m.group(1)}]({quote(m.group(2), safe="/")})',
+        lambda m: f'![{m.group(1)}]({unquote(m.group(2))})',
         content
     )
 
@@ -22,4 +21,4 @@ for md_file in md_files:
     with open(md_file, 'w', encoding='utf-8') as f:
         f.write(content)
 
-print("路径编码完成！")
+print("路径解码完成！")
