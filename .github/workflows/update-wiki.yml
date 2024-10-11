@@ -1,4 +1,3 @@
-
 on:
   push:
     branches: [master]
@@ -7,23 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
-      # 设置区域设置为中文，确保系统能处理中文字符
-      - name: Set locale to zh_CN.UTF-8
-        run: |
-          sudo apt-get update && sudo apt-get install -y locales
-          sudo locale-gen zh_CN.UTF-8
-          sudo update-locale LANG=zh_CN.UTF-8
-          export LANG=zh_CN.UTF-8
-
-      # 设置 Git 配置，处理中文文件名
-      - name: Configure Git to handle UTF-8 filenames
-        run: |
-          git config --global core.quotepath false
-          git config --global core.precomposeUnicode true
-          git config --global i18n.commitencoding utf-8
-          git config --global i18n.logoutputencoding utf-8
-
+      
       # 安装 Python 环境
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -34,9 +17,9 @@ jobs:
       - name: Encode Chinese paths
         run: python encode_paths.py
 
-      # 使用 GitHub Wiki Action 发布到 Wiki
+      
       - uses: Andrew-Chen-Wang/github-wiki-action@v4
         with:
           token: ${{ secrets.GIGANTIC_MEGA_PROJECT_GITHUB_TOKEN }}
-          repository: c61292558/WingHexExplorer2.Wiki
+          repository: Wing-summer/WingHexExplorer2
           path: .
