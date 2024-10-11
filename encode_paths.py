@@ -12,7 +12,6 @@ for md_file in markdown_files:
         content = f.read()
 
     # 找到所有的图片路径并进行解码
-    # 这里假设图片的路径在markdown中都是类似的格式
     updated_content = content
     for line in content.splitlines():
         if '![' in line:
@@ -22,11 +21,12 @@ for md_file in markdown_files:
 
             # 解码路径
             decoded_path = urllib.parse.unquote(img_path)
-            # 重新编码为中文路径
-            updated_path = os.path.join(base_path, decoded_path)
 
-            # 替换内容中的路径
-            updated_content = updated_content.replace(img_path, updated_path)
+            # 检查图片是否存在
+            full_image_path = os.path.join(os.path.dirname(file_path), decoded_path)
+            if os.path.isfile(full_image_path):
+                # 替换内容中的路径为中文路径
+                updated_content = updated_content.replace(img_path, decoded_path)
 
     with open(file_path, 'w', encoding='utf-8') as f:
         f.write(updated_content)
