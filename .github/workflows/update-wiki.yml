@@ -1,0 +1,25 @@
+on:
+  push:
+    branches: [master]
+jobs:
+  publish-wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      # 安装 Python 环境
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      # 如果需要，运行您的 Python 脚本
+      - name: Encode Chinese paths
+        run: python encode_paths.py
+
+      
+      - uses: Andrew-Chen-Wang/github-wiki-action@v4
+        with:
+          token: ${{ secrets.GIGANTIC_MEGA_PROJECT_GITHUB_TOKEN }}
+          repository: c61292558/WingHexExplorer2.Wiki
+          path: .
